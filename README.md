@@ -2,15 +2,42 @@
 
 **Team conversations that survive a disconnected tab.**
 
-[Try the live workspace](https://syncsphere-29f5.onrender.com) · Create a demo account and invite a second browser account into a private room. Free hosting may take a minute to wake after inactivity.
+[Try the live workspace](https://syncsphere-29f5.onrender.com) | Create a demo account and invite a second browser account into a private room. Free hosting may take a minute to wake after inactivity.
 
 [![Messaging checks](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml/badge.svg)](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml)
 
 A Flask-SocketIO messaging workspace with private invite-only rooms, durable messages, acknowledged sends, bounded history recovery, file sharing, and optional message translation. SQLite makes local review simple; PostgreSQL provides durable hosted storage, and MongoDB with Redis supports coordinated server processes.
 
-![Two users exchanging messages in a private room](docs/screenshots/conversation.png)
+## Interface
 
-Captured from two actual local browser accounts after sending messages and reloading the conversation. All messages shown are synthetic demonstration content.
+![Live hosted private conversation between two accounts](docs/screenshots/hosted-conversation.png)
+
+<details>
+<summary>Account entry screen</summary>
+
+![SyncSphere sign-in and account creation](docs/screenshots/welcome.png)
+
+</details>
+
+The conversation screenshot comes from two actual accounts on the hosted demo after sending messages and reloading the conversation. All messages shown are synthetic demonstration content.
+
+## Two-minute review
+
+1. Open the live workspace and create an account; use a second browser profile for another account.
+2. Create a room, copy its invite, and join from the second account.
+3. Send messages in both directions, then refresh: saved history reappears.
+4. Open [CI results](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml) to inspect storage, multi-server delivery, and container checks.
+
+### Architecture
+
+```mermaid
+flowchart LR
+    Browser[Browser / Socket.IO] --> API[Flask HTTP + Socket.IO]
+    API --> Auth[Session and room authorization]
+    Auth --> Store[Atomic document store]
+    Store --> DB[(SQLite / PostgreSQL / MongoDB)]
+    API <-. Multi-instance events .-> Redis[(Optional Redis)]
+```
 
 ## Run locally
 
