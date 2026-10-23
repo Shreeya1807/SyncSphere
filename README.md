@@ -2,6 +2,8 @@
 
 **Team conversations that survive a disconnected tab.**
 
+[Try the live workspace](https://syncsphere-29f5.onrender.com) · Create a demo account and invite a second browser account into a private room. Free hosting may take a minute to wake after inactivity.
+
 [![Messaging checks](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml/badge.svg)](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml)
 
 A Flask-SocketIO messaging workspace with private invite-only rooms, durable messages, acknowledged sends, bounded history recovery, file sharing, and optional message translation. SQLite makes local review simple; PostgreSQL provides durable hosted storage, and MongoDB with Redis supports coordinated server processes.
@@ -85,3 +87,9 @@ For a single application instance, set `DATABASE_URL` to a PostgreSQL connection
 Transactions use per-document advisory locks, including first writes, so concurrent updates cannot overwrite one another. Failed updates roll back. PostgreSQL CI runs the authorization, messaging, concurrency, rollback and restart tests against a real PostgreSQL 17 service. Each operation opens a bounded-time connection; this deployment is intended for a small portfolio workload. Multiple instances additionally require shared Redis event delivery and suitable WebSocket routing.
 
 Free hosting may sleep when idle and has shared resource quotas. Keep real sensitive information out of the public demo. Translation still requires a separate compatible provider.
+
+## Hosted delivery
+
+`render.yaml` describes a free Docker service. When importing this blueprint with a connected GitHub account, it requests deployment after CI checks pass. The current public demo was deployed manually from a verified commit; merely adding this file does not connect an existing service to GitHub. Free services can sleep and share account quotas.
+
+For updates, run the repository checks, confirm the intended commit in GitHub Actions, and deploy that commit from Render. Confirm the readiness endpoint and repeat the documented browser walkthrough. Roll back to the last verified deploy in Render if a release fails. Database schema changes need a separate compatibility and backup plan; reverting application code does not revert stored data.

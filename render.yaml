@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: syncsphere
+    runtime: docker
+    plan: free
+    branch: public-view
+    autoDeployTrigger: checksPass
+    healthCheckPath: /health/ready
+    envVars:
+      - key: PORT
+        value: "5000"
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
