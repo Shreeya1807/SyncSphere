@@ -1,5 +1,5 @@
 name: Messaging checks
-on: [push, pull_request, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch, workflow_call]
 permissions:
   contents: read
 jobs:
@@ -16,6 +16,8 @@ jobs:
       - run: python -m pytest -q
   container:
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ci-only-random-test-configuration
     steps:
       - uses: actions/checkout@v4
       - run: SECRET_KEY=ci-only-random-test-configuration docker compose up --build -d --wait

@@ -1,5 +1,107 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SyncSphere · Team conversations</title><link rel="stylesheet" href="/assets/style.css"></head><body>
-<header><strong>◉ SyncSphere</strong><span id="connection">Your team, in sync.</span><button id="logout" hidden>Sign out</button></header>
-<section id="auth"><div><p class="eyebrow">A SHARED SPACE FOR GOOD WORK</p><h1>Less distance.<br>Better conversations.</h1><p>Private rooms, shared files, and conversations that pick up where you left off.</p><p class="muted">Self-hosted messaging. Transport security requires HTTPS. Messages are stored on the server and are not end-to-end encrypted.</p></div><form id="auth-form"><h2>Welcome to your workspace</h2><label>Username<input id="username" autocomplete="username" pattern="[a-zA-Z0-9_]{3,30}" required></label><label>Password<input id="password" type="password" minlength="10" maxlength="128" autocomplete="current-password" required></label><button name="action" value="login">Sign in</button><button name="action" value="register" class="secondary">Create account</button></form></section>
-<main id="workspace" hidden><aside><p class="eyebrow">YOUR ROOMS</p><nav id="rooms"></nav><form id="create-room"><label>New room<input id="room-name" maxlength="80" placeholder="Design studio" required></label><button>Create room</button></form><form id="join-room"><label>Have an invite?<input id="invite" placeholder="Paste an invite code" required></label><button class="secondary">Join room</button></form></aside><section class="conversation"><div class="room-heading"><h2 id="room-title">Make room for a conversation.</h2><p id="room-detail">Create a room or join your team using an invite code.</p><button id="copy-invite" hidden>Copy invite</button></div><div id="messages" aria-live="polite"></div><form id="compose" hidden><label class="sr-only" for="message">Your message</label><textarea id="message" maxlength="2000" placeholder="Share an update…"></textarea><div class="send-row"><label>Attach file<input id="file" type="file" accept=".pdf,.txt,.csv,.png,.jpg,.jpeg"></label><button>Send message</button></div><small>Up to 2 MB per file · Latest 500 messages retained per room · Acknowledged after storage</small></form></section></main>
-<p id="status" role="status"></p><script src="/assets/socket.io.min.js"></script><script src="/assets/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SyncSphere · Team conversations</title>
+    <link rel="stylesheet" href="/assets/style.css" />
+  </head>
+  <body>
+    <header>
+      <strong>◉ SyncSphere</strong
+      ><span id="connection">Your team, in sync.</span
+      ><button id="logout" hidden>Sign out</button>
+    </header>
+    <section id="auth">
+      <div>
+        <p class="eyebrow">A SHARED SPACE FOR GOOD WORK</p>
+        <h1>Less distance.<br />Better conversations.</h1>
+        <p>
+          Private rooms, shared files, and conversations that pick up where you
+          left off.
+        </p>
+        <p class="muted">
+          Self-hosted messaging. Transport security requires HTTPS. Messages are
+          stored on the server and are not end-to-end encrypted.
+        </p>
+      </div>
+      <form id="auth-form">
+        <h2>Welcome to your workspace</h2>
+        <label
+          >Username<input
+            id="username"
+            autocomplete="username"
+            pattern="[a-zA-Z0-9_]{3,30}"
+            required /></label
+        ><label
+          >Password<input
+            id="password"
+            type="password"
+            minlength="10"
+            maxlength="128"
+            autocomplete="current-password"
+            required /></label
+        ><button name="action" value="login">Sign in</button
+        ><button name="action" value="register" class="secondary">
+          Create account
+        </button>
+      </form>
+    </section>
+    <main id="workspace" hidden>
+      <aside>
+        <p class="eyebrow">YOUR ROOMS</p>
+        <nav id="rooms"></nav>
+        <form id="create-room">
+          <label
+            >New room<input
+              id="room-name"
+              maxlength="80"
+              placeholder="Design studio"
+              required /></label
+          ><button>Create room</button>
+        </form>
+        <form id="join-room">
+          <label
+            >Have an invite?<input
+              id="invite"
+              placeholder="Paste an invite code"
+              required /></label
+          ><button class="secondary">Join room</button>
+        </form>
+      </aside>
+      <section class="conversation">
+        <div class="room-heading">
+          <h2 id="room-title">Make room for a conversation.</h2>
+          <p id="room-detail">
+            Create a room or join your team using an invite code.
+          </p>
+          <button id="copy-invite" hidden>Copy invite</button>
+        </div>
+        <div id="messages" aria-live="polite"></div>
+        <form id="compose" hidden>
+          <label class="sr-only" for="message">Your message</label
+          ><textarea
+            id="message"
+            maxlength="2000"
+            placeholder="Share an update…"
+          ></textarea>
+          <div class="send-row">
+            <label
+              >Attach file<input
+                id="file"
+                type="file"
+                accept=".pdf,.txt,.csv,.png,.jpg,.jpeg" /></label
+            ><button>Send message</button>
+          </div>
+          <small
+            >Up to 2 MB per file · Latest 500 messages retained per room ·
+            Acknowledged after storage</small
+          >
+        </form>
+      </section>
+    </main>
+    <p id="status" role="status"></p>
+    <script src="/assets/socket.io.min.js"></script>
+    <script src="/assets/app.js"></script>
+  </body>
+</html>
