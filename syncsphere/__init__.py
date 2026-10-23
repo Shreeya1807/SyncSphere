@@ -32,11 +32,16 @@ def create_app(config=None):
         PERMANENT_SESSION_LIFETIME=timedelta(days=7),
         DATABASE_PATH=os.environ.get("DATABASE_PATH", "data/syncsphere.sqlite"),
         MONGO_URL=os.environ.get("MONGO_URL"),
+        DATABASE_URL=os.environ.get("DATABASE_URL"),
         REDIS_URL=os.environ.get("REDIS_URL"),
     )
     if config:
         app.config.update(config)
-    store = Store(app.config["DATABASE_PATH"], app.config.get("MONGO_URL"))
+    store = Store(
+        app.config["DATABASE_PATH"],
+        app.config.get("MONGO_URL"),
+        database_url=app.config.get("DATABASE_URL"),
+    )
     socket = SocketIO(
         app,
         async_mode="threading",

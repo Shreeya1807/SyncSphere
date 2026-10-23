@@ -4,7 +4,7 @@
 
 [![Messaging checks](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml/badge.svg)](https://github.com/Shreeya1807/SyncSphere/actions/workflows/ci.yml)
 
-A Flask-SocketIO messaging workspace with private invite-only rooms, durable messages, acknowledged sends, bounded history recovery, file sharing, and optional message translation. SQLite makes local review simple; MongoDB and Redis support coordinated server processes.
+A Flask-SocketIO messaging workspace with private invite-only rooms, durable messages, acknowledged sends, bounded history recovery, file sharing, and optional message translation. SQLite makes local review simple; PostgreSQL provides durable hosted storage, and MongoDB with Redis supports coordinated server processes.
 
 ![Two users exchanging messages in a private room](docs/screenshots/conversation.png)
 
@@ -77,3 +77,11 @@ This repository preserves the original SyncSphere project and its Git history fr
 ## Container releases
 
 A `v*` tag or manual release reruns the full CI workflow before publishing a commit-addressed image to GitHub Container Registry with provenance and a software bill of materials. No image is published from a failed verification run. Hosting still requires a compatible runtime and persistent storage where applicable; publishing an image is not a cloud deployment.
+
+## PostgreSQL hosting
+
+For a single application instance, set `DATABASE_URL` to a PostgreSQL connection URL, leave `MONGO_URL` and `REDIS_URL` unset, and provide a persistent random `SECRET_KEY`. Set `COOKIE_SECURE=1` behind HTTPS. Hosted connections should use `sslmode=verify-full`; the application supplies a trusted CA bundle. The table is created on first startup.
+
+Transactions use per-document advisory locks, including first writes, so concurrent updates cannot overwrite one another. Failed updates roll back. PostgreSQL CI runs the authorization, messaging, concurrency, rollback and restart tests against a real PostgreSQL 17 service. Each operation opens a bounded-time connection; this deployment is intended for a small portfolio workload. Multiple instances additionally require shared Redis event delivery and suitable WebSocket routing.
+
+Free hosting may sleep when idle and has shared resource quotas. Keep real sensitive information out of the public demo. Translation still requires a separate compatible provider.

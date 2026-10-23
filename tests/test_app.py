@@ -1,4 +1,5 @@
 import io
+import os
 from concurrent.futures import ThreadPoolExecutor
 
 import pytest
@@ -7,12 +8,21 @@ from syncsphere import create_app
 
 @pytest.fixture
 def app(tmp_path):
+    if os.environ.get("TEST_DATABASE_URL"):
+        import psycopg
+
+        with psycopg.connect(os.environ["TEST_DATABASE_URL"]) as db:
+            db.execute(
+                "CREATE TABLE IF NOT EXISTS syncsphere_documents (id TEXT PRIMARY KEY, body JSONB NOT NULL)"
+            )
+            db.execute("TRUNCATE syncsphere_documents")
     return create_app(
         {
             "TESTING": True,
             "SECRET_KEY": "test-secret-only",
             "DATABASE_PATH": tmp_path / "test.sqlite",
             "MONGO_URL": None,
+            "DATABASE_URL": os.environ.get("TEST_DATABASE_URL"),
             "REDIS_URL": None,
         }
     )
@@ -129,7 +139,27 @@ def test_atomic_updates_and_restart_persistence(app):
             "SECRET_KEY": "test-secret-only",
             "DATABASE_PATH": app.config["DATABASE_PATH"],
             "MONGO_URL": None,
+            "DATABASE_URL": os.environ.get("TEST_DATABASE_URL"),
             "REDIS_URL": None,
         }
     )
     assert restarted.extensions["store"].get("counter")["n"] == 50
+
+
+def test_storage_rollback_and_reopen(app):
+    from syncsphere.store import Store
+
+    store = app.extensions["store"]
+    store.put("rollback-test", {"count": 1})
+
+    def fail(body):
+        body["count"] = 99
+        raise ValueError("abort transaction")
+
+    with pytest.raises(ValueError, match="abort transaction"):
+        store.mutate("rollback-test", fail)
+    reopened = Store(
+        app.config["DATABASE_PATH"], database_url=app.config.get("DATABASE_URL")
+    )
+    assert reopened.get("rollback-test") == {"count": 1}
+    assert reopened.healthy()
