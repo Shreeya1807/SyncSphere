@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_socketio import SocketIO
 from PIL import Image
@@ -51,7 +52,7 @@ class EmailFunctions:
         email = to_email
         message = MIMEMultipart()
         sender_email = "noreply.lanchatting@gmail.com"
-        app_password = "oymk pdnc gbxx wmzk"
+        app_password = os.environ.get("SMTP_PASSWORD", "")
 
         body = body
 
@@ -89,7 +90,7 @@ class EmailFunctions:
         email = email
         message = MIMEMultipart()
         sender_email = "noreply.lanchatting@gmail.com"
-        app_password = "oymk pdnc gbxx wmzk"
+        app_password = os.environ.get("SMTP_PASSWORD", "")
 
         subject = "Verify your email address for SyncSphere"
         otp = str(random.randint(100000, 999999))
@@ -131,7 +132,7 @@ class EmailFunctions:
         message = MIMEMultipart()
         message_u = MIMEMultipart()
         sender_email = "noreply.lanchatting@gmail.com"
-        app_password = "oymk pdnc gbxx wmzk"
+        app_password = os.environ.get("SMTP_PASSWORD", "")
         report_ticket = EmailFunctions.generate_random_string(10)
 
         subject = "User wanted some help!"
@@ -199,7 +200,7 @@ class EmailFunctions:
         email = email_
         message = MIMEMultipart()
         sender_email = "noreply.lanchatting@gmail.com"
-        app_password = "oymk pdnc gbxx wmzk"
+        app_password = os.environ.get("SMTP_PASSWORD", "")
 
         subject = "Account Registration Successfull!😊"
 
@@ -233,7 +234,7 @@ class EmailFunctions:
         email = email_
         message = MIMEMultipart()
         sender_email = "noreply.lanchatting@gmail.com"
-        app_password = "oymk pdnc gbxx wmzk"
+        app_password = os.environ.get("SMTP_PASSWORD", "")
 
         subject = "IMPORTANT!!"
 
